@@ -18,9 +18,5 @@ buildscript {
         mavenLocal()
         mavenCentral()
     }
-
-    dependencies {
-        classpath 'net.saliman:gradle-cobertura-plugin:1.1.2'
-    }
 }
 
