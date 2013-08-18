@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <changeSet author="charliek" id="create_author_and_post">
+
+        <createTable tableName="author">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="github_user" type="varchar(100)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="date_created" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="last_updated" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="post">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="author_id" type="bigint">
+                <constraints nullable="false" references="author(id)" foreignKeyName="fk_post_author_id"/>
+            </column>
+
+            <column name="title" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="slug" type="varchar(250)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="body" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="draft" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="date_published" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="date_created" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="last_updated" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+
+        </createTable>
+
+        <createIndex indexName="idx_post_author"
+                     tableName="post"
+                     unique="false">
+            <column name="author_id" type="bigint"/>
+        </createIndex>
+
+        <createIndex indexName="idx_post_slug"
+                     tableName="post"
+                     unique="true">
+            <column name="slug" type="varchar(250)"/>
+            <column name="author_id" type="bigint"/>
+        </createIndex>
+
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,10 @@
+apply from: rootProject.file('base.gradle')
+
+dependencies {
+    compile "com.yammer.dropwizard:dropwizard-core:${dropwizardVersion}"
+    compile "com.yammer.dropwizard:dropwizard-hibernate:${dropwizardVersion}"
+    compile "com.yammer.dropwizard:dropwizard-migrations:${dropwizardVersion}"
+
+    // http://forums.gradle.org/gradle/topics/receiving_a_java_lang_exceptionininitializererror_when_building_groovy_but_not_java_for_same_project?topic=receiving_a_java_lang_exceptionininitializererror_when_building_groovy_but_not_java_for_same_project
+    compile "com.sun.jersey:jersey-client:1.15"
+}

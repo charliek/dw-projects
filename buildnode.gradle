@@ -1,0 +1,2 @@
+apply plugin: 'build-dashboard'
+apply plugin: 'idea'

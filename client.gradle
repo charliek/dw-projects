@@ -1,0 +1,9 @@
+apply from: rootProject.file('base.gradle')
+
+dependencies {
+    compile project(":services:${projectName}:${projectName}-api")
+}
+
+String getProjectName() {
+    project.parent.name
+}
