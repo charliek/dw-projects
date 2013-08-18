@@ -1,6 +1,6 @@
 package charliek.blog.transfer
 
-import org.joda.time.LocalDate
+import org.joda.time.LocalDateTime
 
 class Post {
 
@@ -10,7 +10,7 @@ class Post {
     String slug
     String body
     Boolean draft
-    LocalDate datePublished
-    LocalDate dateCreated
-    LocalDate lastUpdated
+    LocalDateTime datePublished
+    LocalDateTime dateCreated
+    LocalDateTime lastUpdated
 }
