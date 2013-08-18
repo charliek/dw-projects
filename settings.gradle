@@ -1,7 +1,7 @@
 import groovy.io.FileType
 import groovy.io.FileVisitResult
 
-rootProject.name = 'dw-blog'
+rootProject.name = 'dw-projects'
 
 def path = [] as LinkedList
 rootDir.traverse(
