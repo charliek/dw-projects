@@ -8,12 +8,14 @@ import charliek.blog.service.resources.PostResource
 import charliek.dw.exceptions.NotFoundExceptionMapper
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.common.collect.ImmutableList
 import com.yammer.dropwizard.Service
 import com.yammer.dropwizard.assets.AssetsBundle
 import com.yammer.dropwizard.config.Bootstrap
 import com.yammer.dropwizard.config.Environment
 import com.yammer.dropwizard.db.DatabaseConfiguration
 import com.yammer.dropwizard.hibernate.HibernateBundle
+import com.yammer.dropwizard.hibernate.SessionFactoryFactory
 import com.yammer.dropwizard.migrations.MigrationsBundle
 import org.hibernate.SessionFactory
 
@@ -27,20 +29,27 @@ class BlogService extends Service<BlogConfiguration> {
     ]
     protected final AssetsBundle assetsBundle = new AssetsBundle()
 
-    protected MigrationsBundle<BlogConfiguration> migrationsBundle = new MigrationsBundle<BlogConfiguration>() {
-        @Override
-        public DatabaseConfiguration getDatabaseConfiguration(BlogConfiguration configuration) {
-            return configuration.database
+    MigrationsBundle<BlogConfiguration> buildMigrationsBundle() {
+        new MigrationsBundle<BlogConfiguration>() {
+            @Override
+            public DatabaseConfiguration getDatabaseConfiguration(BlogConfiguration configuration) {
+                return configuration.database
+            }
         }
     }
 
-    protected HibernateBundle<BlogConfiguration> hibernateBundle =
-        new HibernateBundle<BlogConfiguration>(SERVICE_ENTITIES) {
-        @Override
-        public DatabaseConfiguration getDatabaseConfiguration(BlogConfiguration configuration) {
-            return configuration.database
+    HibernateBundle<BlogConfiguration> buildHibernateBundle() {
+        ImmutableList entities = ImmutableList.copyOf(SERVICE_ENTITIES)
+        new HibernateBundle<BlogConfiguration>(entities, new SessionFactoryFactory()) {
+            @Override
+            public DatabaseConfiguration getDatabaseConfiguration(BlogConfiguration configuration) {
+                return configuration.database
+            }
         }
     }
+
+    protected MigrationsBundle<BlogConfiguration> migrationsBundle = buildMigrationsBundle()
+    protected HibernateBundle<BlogConfiguration> hibernateBundle = buildHibernateBundle()
 
     public static void main(String[] args) throws Exception {
         new BlogService().run(args)
