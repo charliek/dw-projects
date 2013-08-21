@@ -22,10 +22,10 @@ database:
 http:
 
   # The port on which the HTTP server listens for service requests.
-  port: 8090
+  port: 5678
 
   # The port on which the HTTP server listens for administrative requests.
-  adminPort: 8091
+  adminPort: 5679
 
   # Maximum number of threads.
   maxThreads: 100

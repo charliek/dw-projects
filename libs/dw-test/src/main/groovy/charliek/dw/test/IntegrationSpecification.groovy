@@ -2,6 +2,7 @@ package charliek.dw.test
 
 import ch.qos.logback.classic.Level
 import charliek.dw.exceptions.NotFoundExceptionMapper
+import charliek.dw.exceptions.ValidationExceptionMapper
 import com.yammer.dropwizard.config.Configuration
 import com.yammer.dropwizard.config.Environment
 import com.yammer.dropwizard.config.LoggingConfiguration
@@ -82,6 +83,7 @@ abstract class IntegrationSpecification extends ResourceSpecification {
         Environment environment = new Environment('DAOTest', configuration, null, null)
         // TODO need to make this abstract so it can vary based on the service
         addProvider(NotFoundExceptionMapper)
+        addProvider(ValidationExceptionMapper)
         factory.build(environment, databaseConfiguration, entities)
     }
 

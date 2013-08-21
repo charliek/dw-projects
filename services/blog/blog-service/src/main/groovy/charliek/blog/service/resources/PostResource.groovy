@@ -1,13 +1,19 @@
 package charliek.blog.service.resources
 
 import charliek.blog.service.dao.PostDAO
+import charliek.blog.service.domain.PostEntity
 import charliek.blog.transfer.Post
+import charliek.dw.exceptions.ValidationException
 import charliek.dw.resources.AbstractResource
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yammer.dropwizard.hibernate.UnitOfWork
 import com.yammer.metrics.annotation.Timed
 
+import javax.validation.Valid
 import javax.ws.rs.GET
+import javax.ws.rs.POST
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -28,8 +34,35 @@ class PostResource extends AbstractResource {
     @GET
     @UnitOfWork(transactional = false)
     @Timed
-    Post getPost(@PathParam('id') Long id) {
-      return translateAndReturn(postDAO.findById(id), Post)
+    Post getPostById(@PathParam('id') Long id) {
+        return translateAndReturn(postDAO.findById(id), Post)
+    }
+
+    @GET
+    @UnitOfWork(transactional = false)
+    @Timed
+    List<Post> getAllPosts() {
+        return translateAndReturn(postDAO.listPosts(), new TypeReference<List<Post>>() {})
+    }
+
+    @POST
+    @UnitOfWork(transactional = true)
+    @Timed
+    Post addPost(@Valid Post post) {
+        PostEntity entity = convert(post, PostEntity)
+        return translateAndReturn(postDAO.saveOrUpdate(entity), Post)
+    }
+
+    @Path('/{id}')
+    @PUT
+    @UnitOfWork(transactional = true)
+    @Timed
+    Post updatePost(@PathParam('id') Long id, @Valid Post post) {
+        if (id != post.id) {
+            throw new ValidationException('Id mismatch in request')
+        }
+        PostEntity entity = convert(post, PostEntity)
+        return translateAndReturn(postDAO.saveOrUpdate(entity), Post)
     }
 
 }

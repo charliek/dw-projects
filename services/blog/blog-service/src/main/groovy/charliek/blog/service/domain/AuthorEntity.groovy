@@ -4,18 +4,15 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import org.joda.time.LocalDateTime
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = 'author')
 @ToString(excludes = [])
 @EqualsAndHashCode(excludes = [''])
 class AuthorEntity {
+
+    // TODO add versions
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

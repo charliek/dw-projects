@@ -1,6 +1,7 @@
 package charliek.dw.test
 
 import charliek.dw.exceptions.NotFoundExceptionMapper
+import charliek.dw.exceptions.ValidationExceptionMapper
 import com.sun.jersey.api.client.Client
 import com.sun.jersey.api.client.GenericType
 import com.sun.jersey.test.framework.AppDescriptor
@@ -39,6 +40,7 @@ abstract class ResourceSpecification extends Specification {
 
         // TODO need to make this abstract so it can vary based on the service
         addProvider(NotFoundExceptionMapper)
+        addProvider(ValidationExceptionMapper)
     }
 
     void cleanupSpec() {

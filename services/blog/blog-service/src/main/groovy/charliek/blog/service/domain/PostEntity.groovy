@@ -4,22 +4,17 @@ import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import org.joda.time.LocalDateTime
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.Lob
-import javax.persistence.ManyToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = 'post')
 @ToString(excludes = [])
 @EqualsAndHashCode(excludes = [''])
 class PostEntity {
+
+    // TODO add versions
+    // TODO add unique and composite keys
+    // TODO add tags
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +31,7 @@ class PostEntity {
     String slug
 
     @Lob
-    @Column(nullable = false, columnDefinition='TEXT')
+    @Column(nullable = false, columnDefinition = 'TEXT')
     String body
 
     @Column(nullable = false)

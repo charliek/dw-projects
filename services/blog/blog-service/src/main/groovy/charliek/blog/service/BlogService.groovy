@@ -1,11 +1,14 @@
 package charliek.blog.service
 
 import charliek.blog.service.conf.BlogConfiguration
+import charliek.blog.service.dao.AuthorDAO
 import charliek.blog.service.dao.PostDAO
 import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
+import charliek.blog.service.resources.AuthorResource
 import charliek.blog.service.resources.PostResource
 import charliek.dw.exceptions.NotFoundExceptionMapper
+import charliek.dw.exceptions.ValidationExceptionMapper
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.ImmutableList
@@ -67,12 +70,15 @@ class BlogService extends Service<BlogConfiguration> {
     void run(BlogConfiguration configuration, Environment environment) throws Exception {
         environment.objectMapperFactory.disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
         environment.addProvider(NotFoundExceptionMapper)
+        environment.addProvider(ValidationExceptionMapper)
 
         SessionFactory sessionFactory = hibernateBundle.sessionFactory
         ObjectMapper objectMapper = environment.objectMapperFactory.build()
 
-        PostDAO postDAO = new PostDAO(sessionFactory)
+        AuthorDAO authorDAO = new AuthorDAO(sessionFactory)
+        PostDAO postDAO = new PostDAO(sessionFactory, authorDAO)
 
         environment.addResource(new PostResource(postDAO, objectMapper))
+        environment.addResource(new AuthorResource(postDAO, authorDAO, objectMapper))
     }
 }
