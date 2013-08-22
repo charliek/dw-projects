@@ -13,6 +13,8 @@ apply plugin: 'maven-publish'
 
 group 'com.github.charliek'
 
+apply from: rootProject.file('versioning.gradle')
+
 buildscript {
     repositories {
         mavenLocal()

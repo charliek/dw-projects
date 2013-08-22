@@ -1,0 +1,12 @@
+ext.release = project.hasProperty('release')
+
+version = currentVersion
+
+ext.isSnapshot = false
+if (release) {
+    //use the version
+} else {
+    // make items snapshot by default
+    version += '-SNAPSHOT'
+    isSnapshot = true
+}
