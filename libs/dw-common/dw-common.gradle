@@ -1,3 +1,4 @@
+group "${rootProject.group}"
 apply from: rootProject.file('base.gradle')
 
 dependencies {

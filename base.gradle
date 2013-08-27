@@ -5,7 +5,6 @@ apply plugin: 'idea'
 apply plugin: 'maven-publish'
 apply plugin: 'project-report'
 
-group "${rootProject.group}"
 version = rootProject.version
 
 repositories {
@@ -77,3 +76,27 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 task install(dependsOn: publishToMavenLocal)
+
+publishing {
+    publications {
+        artifact(MavenPublication) {
+            from components.java
+            artifact sourcesJar {
+                classifier 'sources'
+            }
+        }
+    }
+    if(! isSnapshot) {
+        repositories {
+            maven {
+                name "bintray-charliek-maven-${project.group}:${project.name}"
+                url "https://api.bintray.com/maven/charliek/maven/${project.group}:${project.name}"
+                credentials {
+                    username bintray_username
+                    password bintray_api_key
+                }
+            }
+        }
+    }
+}
+

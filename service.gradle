@@ -1,6 +1,7 @@
 import org.gradle.api.plugins.shadow.transformers.ServiceFileTransformer
 import org.gradle.api.plugins.shadow.ShadowPlugin
 
+group "${rootProject.group}.service"
 apply from: rootProject.file('base.gradle')
 
 buildscript {
@@ -82,6 +83,10 @@ project.tasks.shadow.dependsOn copySignedLibs
 project.tasks.shadow.doLast {
     ant.checksum file: it.outputJar
 }
+
+// Remove the jar artifact and publish the zip
+publishing.publications.artifact.artifacts = []
+publishing.publications.artifact.artifact zip
 
 /**
  * Task that will start up the DW service using the local configuration.
