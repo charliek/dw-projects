@@ -29,6 +29,14 @@ class AuthorResource extends AbstractResource {
         this.authorDAO = authorDAO
     }
 
+    @Path('/{githubName}')
+    @GET
+    @UnitOfWork(transactional = true)
+    @Timed
+    Author getAuthorByGithubName(@PathParam('githubName') String githubName) {
+        return translateAndReturn(authorDAO.findByGithubUser(githubName), Author)
+    }
+
     @Path('/{id}')
     @PUT
     @UnitOfWork(transactional = true)

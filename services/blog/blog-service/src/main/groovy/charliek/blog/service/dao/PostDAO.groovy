@@ -44,6 +44,14 @@ class PostDAO extends AbstractDAO<PostEntity> {
         Validate.isNotNull(pastPost, 'Invalid post id sent')
         Validate.match(authorId, pastPost.author.id, 'Author can not change on post')
         validateUniqueSlug(post, authorId)
+
+        // Setup defaults that can not be updated
+        post.author = pastPost.author
+        post.dateCreated = pastPost.dateCreated
+        post.datePublished = pastPost.datePublished
+        if (! post.draft && ( pastPost.draft || post.datePublished == null )) {
+            post.datePublished = new LocalDateTime()
+        }
     }
 
     private void validateUniqueSlug(PostEntity post, Long authorId) {
@@ -63,7 +71,6 @@ class PostDAO extends AbstractDAO<PostEntity> {
 
         // Don't let the user modify the author object
         post.author = author
-
         if (post.draft) {
             post.datePublished = null
         } else {

@@ -7,6 +7,6 @@ class Errors {
     Errors() {}
 
     Errors(String objectError) {
-        objectErrors << objectError
+        objectErrors << new ClassError(message: objectError)
     }
 }

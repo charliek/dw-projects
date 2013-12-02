@@ -35,7 +35,7 @@ class PostEntity {
     String body
 
     @Column(nullable = false)
-    Boolean draft
+    Boolean draft = true
 
     @Column(name = 'date_published', nullable = true)
     LocalDateTime datePublished
