@@ -21,4 +21,4 @@ ADD  services/blog/blog-service/build/libs/blog-service-0.0.2-SNAPSHOT-shadow.ja
 ADD services/blog/blog-service/src/main/resources/local_config.yml /opt/apps/blog-service/config.yaml
 
 EXPOSE 5678 5679
-ENTRYPOINT java -Ddw.database.url=$DW_DB_URL -jar /opt/apps/blog-service/blog-service.jar server /opt/apps/blog-service/config.yaml
+ENTRYPOINT java -Ddw.database.url=$DW_DB_URL -Ddw.etcd.hosts=$ETCD_URL -Ddw.etcd.publish.hostName=$HOST_IP -jar /opt/apps/blog-service/blog-service.jar server /opt/apps/blog-service/config.yaml

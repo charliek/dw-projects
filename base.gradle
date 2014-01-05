@@ -10,10 +10,10 @@ version = rootProject.version
 repositories {
     mavenLocal()
     mavenCentral()
-    maven {
-        // Loading so we can get the spock-snapshot
-        url 'http://oss.sonatype.org/content/repositories/snapshots'
-    }
+
+    // Loading so we can get the spock-snapshot
+    maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url 'http://dl.bintray.com/content/charliek/maven' }
 }
 
 dependencies {

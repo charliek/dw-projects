@@ -1,4 +1,9 @@
 apply from: rootProject.file('service.gradle')
 
+String ribbonExtVersion = '0.0.1'
+
 dependencies {
+    compile "com.charlieknudsen.ribbon-ext:ribbon-retrofit:${ribbonExtVersion}"
+    compile "com.charlieknudsen.ribbon-ext:ribbon-etcd:${ribbonExtVersion}"
+    compile "com.charlieknudsen.ribbon-ext:etcd-client:${ribbonExtVersion}"
 }

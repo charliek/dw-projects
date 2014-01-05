@@ -1,6 +1,7 @@
 package charliek.blog.service.conf
 
 import charliek.dw.conf.GraphiteConfiguration
+import com.charlieknudsen.dropwizard.etcd.EtcdConfiguration
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.yammer.dropwizard.config.Configuration
 import com.yammer.dropwizard.db.DatabaseConfiguration
@@ -19,5 +20,8 @@ class BlogConfiguration extends Configuration {
     @NotNull
     @JsonProperty
     GraphiteConfiguration graphite = new GraphiteConfiguration()
+
+    @Valid
+    EtcdConfiguration etcd = new EtcdConfiguration()
 
 }

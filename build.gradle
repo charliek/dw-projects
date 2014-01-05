@@ -1,6 +1,3 @@
-if (gradle.gradleVersion < '1.7') {
-    throw new GradleException("This build requires Gradle 1.7+ and you are running [${gradle.gradleVersion}]")
-}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.7'

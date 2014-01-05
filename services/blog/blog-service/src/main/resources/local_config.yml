@@ -123,6 +123,7 @@ logging:
     charliek.blog: DEBUG
 
     org.hibernate.SQL: ALL
+    com.charlieknudsen: DEBUG
 
   # Settings for logging to stdout.
   console:
@@ -136,4 +137,12 @@ logging:
 graphite:
   enabled: false
   environment: LOCAL
+
+etcd:
+  # Comma separated list of etcdHosts that can be connected to
+  hosts: http://127.0.0.1:4001
+
+  # Publish this service with these details
+  publish:
+    hostName: 127.0.0.1
 

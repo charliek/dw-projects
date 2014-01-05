@@ -9,6 +9,8 @@ import charliek.blog.service.resources.AuthorResource
 import charliek.blog.service.resources.PostResource
 import charliek.dw.exceptions.NotFoundExceptionMapper
 import charliek.dw.exceptions.ValidationExceptionMapper
+import com.charlieknudsen.dropwizard.etcd.EtcdBundle
+import com.charlieknudsen.dropwizard.etcd.EtcdConfiguration
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.ImmutableList
@@ -24,7 +26,7 @@ import org.hibernate.SessionFactory
 
 class BlogService extends Service<BlogConfiguration> {
 
-    final String serviceName = 'blog'
+    final String serviceName = 'blog-service'
 
     public static final List<Class<?>> SERVICE_ENTITIES = [
             PostEntity,
@@ -51,6 +53,13 @@ class BlogService extends Service<BlogConfiguration> {
         }
     }
 
+    EtcdBundle etcdBundle = new EtcdBundle<BlogConfiguration>() {
+        @Override
+        EtcdConfiguration getEtcdConfiguration(BlogConfiguration configuration) {
+            return configuration.etcd
+        }
+    }
+
     protected MigrationsBundle<BlogConfiguration> migrationsBundle = buildMigrationsBundle()
     protected HibernateBundle<BlogConfiguration> hibernateBundle = buildHibernateBundle()
 
@@ -64,6 +73,7 @@ class BlogService extends Service<BlogConfiguration> {
         bootstrap.addBundle(assetsBundle)
         bootstrap.addBundle(migrationsBundle)
         bootstrap.addBundle(hibernateBundle)
+        bootstrap.addBundle(etcdBundle)
     }
 
     @Override
