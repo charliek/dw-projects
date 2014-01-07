@@ -7,13 +7,8 @@
 #  sudo docker run -p 5678:5678 -p 5679:5679 -e DW_DB_URL="jdbc:mql://192.168.70.1:3306/blog" -t charliek/blog-service
 #
 
-FROM ubuntu:precise
+FROM charliek/openjdk-jre-7
 MAINTAINER charlie.knudsen@gmail.com
-
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
-RUN apt-get update && apt-get -y upgrade
-RUN apt-get -y install openjdk-7-jre-headless curl
-RUN echo "JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64/" >> /etc/environment
 
 RUN mkdir -p /opt/apps/blog-service
 
