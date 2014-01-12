@@ -1,11 +1,10 @@
 database:
 
   # the name of your JDBC driver
-  driverClass: com.mysql.jdbc.Driver
+  driverClass: org.postgresql.Driver
 
-  # Use MySQL 5.x InnoDB dialect for hibernate
   properties:
-      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+      hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 
    # the username
   user: blog
@@ -14,7 +13,7 @@ database:
   password: blog
 
   # the JDBC URL
-  url: jdbc:mysql://localhost:3306/blog
+  url: jdbc:postgresql://192.168.70.99:5432/blog
 
   autoCommentsEnabled: true
 
@@ -140,7 +139,7 @@ graphite:
 
 etcd:
   # Comma separated list of etcdHosts that can be connected to
-  hosts: http://127.0.0.1:4001
+  hosts: http://192.168.70.99:4001
 
   # Publish this service with these details
   publish:

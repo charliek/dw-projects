@@ -28,7 +28,7 @@ dependencies {
     testCompile project(":libs:dw-test")
     
     //DB support
-    compile "mysql:mysql-connector-java:5.1.6"
+    compile "org.postgresql:postgresql:9.3-1100-jdbc41"
     testCompile "com.h2database:h2:1.3.168"
 }
 
