@@ -1,7 +1,7 @@
-package charliek.dw.test
+package com.charlieknudsen.dw.test
 
-import charliek.dw.exceptions.NotFoundExceptionMapper
-import charliek.dw.exceptions.ValidationExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import com.sun.jersey.api.client.Client
 import com.sun.jersey.api.client.GenericType
 import com.sun.jersey.test.framework.AppDescriptor

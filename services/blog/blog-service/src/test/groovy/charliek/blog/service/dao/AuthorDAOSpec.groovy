@@ -3,8 +3,8 @@ package charliek.blog.service.dao
 import charliek.blog.service.BlogService
 import charliek.blog.service.builders.AuthorBuilder
 import charliek.blog.service.domain.AuthorEntity
-import charliek.dw.exceptions.ValidationException
-import charliek.dw.test.DAOSpecification
+import com.charlieknudsen.dw.common.exceptions.ValidationException
+import com.charlieknudsen.dw.test.DAOSpecification
 
 class AuthorDAOSpec extends DAOSpecification<AuthorDAO> {
 

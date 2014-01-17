@@ -1,4 +1,4 @@
-package charliek.dw.test
+package com.charlieknudsen.dw.test
 
 import com.sun.jersey.api.client.Client
 import com.sun.jersey.api.client.config.ClientConfig

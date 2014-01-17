@@ -1,4 +1,4 @@
-package charliek.dw.test
+package com.charlieknudsen.dw.test
 
 import com.yammer.dropwizard.hibernate.AbstractDAO
 

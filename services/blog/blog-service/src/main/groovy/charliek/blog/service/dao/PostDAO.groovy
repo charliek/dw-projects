@@ -2,7 +2,7 @@ package charliek.blog.service.dao
 
 import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
-import charliek.dw.exceptions.Validate
+import com.charlieknudsen.dw.common.exceptions.Validate
 import com.yammer.dropwizard.hibernate.AbstractDAO
 import org.hibernate.Criteria
 import org.hibernate.SessionFactory

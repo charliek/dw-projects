@@ -5,7 +5,7 @@ import charliek.blog.service.builders.AuthorBuilder
 import charliek.blog.service.builders.PostBuilder
 import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
-import charliek.dw.test.DAOSpecification
+import com.charlieknudsen.dw.test.DAOSpecification
 import org.joda.time.LocalDateTime
 
 class PostDAOSpec extends DAOSpecification<PostDAO> {

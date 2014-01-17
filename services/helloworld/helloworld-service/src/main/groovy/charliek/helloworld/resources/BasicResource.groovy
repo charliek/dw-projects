@@ -1,6 +1,6 @@
 package charliek.helloworld.resources
 
-import charliek.dw.resources.AbstractResource
+import com.charlieknudsen.dw.common.resources.AbstractResource
 import charliek.helloworld.transfer.Hello
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yammer.metrics.annotation.Timed

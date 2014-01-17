@@ -5,8 +5,8 @@ import charliek.blog.service.dao.PostDAO
 import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.transfer.Author
 import charliek.blog.transfer.Post
-import charliek.dw.exceptions.ValidationException
-import charliek.dw.resources.AbstractResource
+import com.charlieknudsen.dw.common.exceptions.ValidationException
+import com.charlieknudsen.dw.common.resources.AbstractResource
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yammer.dropwizard.hibernate.UnitOfWork

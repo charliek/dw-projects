@@ -1,6 +1,6 @@
-package charliek.dw.resources
+package com.charlieknudsen.dw.common.resources
 
-import charliek.dw.exceptions.NotFoundException
+import com.charlieknudsen.dw.common.exceptions.NotFoundException
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 

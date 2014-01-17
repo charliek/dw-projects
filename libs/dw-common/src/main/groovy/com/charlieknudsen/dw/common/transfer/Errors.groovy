@@ -1,4 +1,4 @@
-package charliek.dw.transfer
+package com.charlieknudsen.dw.common.transfer
 
 class Errors {
     List<FieldError> fieldErrors = []

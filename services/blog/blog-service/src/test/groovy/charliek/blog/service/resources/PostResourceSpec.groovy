@@ -7,9 +7,8 @@ import charliek.blog.service.dao.AuthorDAO
 import charliek.blog.service.dao.PostDAO
 import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
-import charliek.blog.transfer.Author
 import charliek.blog.transfer.Post
-import charliek.dw.test.IntegrationSpecification
+import com.charlieknudsen.dw.test.IntegrationSpecification
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.sun.jersey.api.client.GenericType
 import com.sun.jersey.api.client.UniformInterfaceException

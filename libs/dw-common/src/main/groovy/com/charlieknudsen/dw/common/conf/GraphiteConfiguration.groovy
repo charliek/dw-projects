@@ -1,4 +1,4 @@
-package charliek.dw.conf
+package com.charlieknudsen.dw.common.conf
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

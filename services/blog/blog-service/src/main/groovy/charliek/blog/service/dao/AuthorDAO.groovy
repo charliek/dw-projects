@@ -1,7 +1,7 @@
 package charliek.blog.service.dao
 
 import charliek.blog.service.domain.AuthorEntity
-import charliek.dw.exceptions.ValidationException
+import com.charlieknudsen.dw.common.exceptions.ValidationException
 import com.google.common.base.Preconditions
 import com.yammer.dropwizard.hibernate.AbstractDAO
 import org.hibernate.SessionFactory

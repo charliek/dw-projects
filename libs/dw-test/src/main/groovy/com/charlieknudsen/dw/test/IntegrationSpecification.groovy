@@ -1,34 +1,34 @@
-package charliek.dw.test
+package com.charlieknudsen.dw.test
 
 import ch.qos.logback.classic.Level
-
+import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import com.yammer.dropwizard.config.Configuration
 import com.yammer.dropwizard.config.Environment
 import com.yammer.dropwizard.config.LoggingConfiguration
 import com.yammer.dropwizard.config.LoggingFactory
 import com.yammer.dropwizard.db.DatabaseConfiguration
 import com.yammer.dropwizard.hibernate.SessionFactoryFactory
-
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.yammer.dropwizard.json.ObjectMapperFactory
 import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.hibernate.Transaction
-
 import spock.lang.Shared
-import spock.lang.Specification
 
-abstract class DatabaseSpecification extends Specification {
+/**
+ * Base class for performing end-to-end integration testing of client, resource, and database
+ * using in-memory Jersey, and H2
+ */
+abstract class IntegrationSpecification extends ResourceSpecification {
 
+    //This is copied form DatabaseSpecification to avoid mixins for now
     @Shared SessionFactory sessionFactory
     @Shared String databaseId
-    @Shared ObjectMapper objectMapper
     Session session
     Transaction transaction
 
     def setupSpec() {
         sessionFactory = buildSessionFactory()
-        objectMapper = new ObjectMapperFactory().build()
+        setupDomain()
     }
 
     def setup() {
@@ -36,7 +36,7 @@ abstract class DatabaseSpecification extends Specification {
         transaction = session.beginTransaction()
     }
 
-    def cleanup() {
+    void cleanup() {
         session?.flush()
         session?.clear()
         transaction?.rollback()
@@ -45,7 +45,7 @@ abstract class DatabaseSpecification extends Specification {
         transaction = null
     }
 
-    def cleanupSpec() {
+    void cleanupSpec() {
         sessionFactory = null
         ["build/${databaseId}.h2.db", "build/${databaseId}.trace.db"].each {
             File dbFile = new File(it)
@@ -54,8 +54,6 @@ abstract class DatabaseSpecification extends Specification {
             }
         }
     }
-
-    abstract List<Class<?>> getEntities()
 
     DatabaseConfiguration getDatabaseConfiguration() {
         databaseId = UUID.randomUUID()
@@ -83,6 +81,12 @@ abstract class DatabaseSpecification extends Specification {
         new LoggingFactory(configuration.loggingConfiguration,'DAOTest').configure()
         SessionFactoryFactory factory = new SessionFactoryFactory()
         Environment environment = new Environment('DAOTest', configuration, null, null)
+        // TODO need to make this abstract so it can vary based on the service
+        addProvider(NotFoundExceptionMapper)
+        addProvider(ValidationExceptionMapper)
         factory.build(environment, databaseConfiguration, entities)
     }
+
+    abstract void setupDomain()
+    abstract List<Class<?>> getEntities()
 }

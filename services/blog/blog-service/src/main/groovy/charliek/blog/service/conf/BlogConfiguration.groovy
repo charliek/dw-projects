@@ -1,6 +1,6 @@
 package charliek.blog.service.conf
 
-import charliek.dw.conf.GraphiteConfiguration
+import com.charlieknudsen.dw.common.conf.GraphiteConfiguration
 import com.charlieknudsen.dropwizard.etcd.EtcdConfiguration
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.yammer.dropwizard.config.Configuration

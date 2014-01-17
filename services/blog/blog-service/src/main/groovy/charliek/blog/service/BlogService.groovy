@@ -7,8 +7,8 @@ import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
 import charliek.blog.service.resources.AuthorResource
 import charliek.blog.service.resources.PostResource
-import charliek.dw.exceptions.NotFoundExceptionMapper
-import charliek.dw.exceptions.ValidationExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import com.charlieknudsen.dropwizard.etcd.EtcdBundle
 import com.charlieknudsen.dropwizard.etcd.EtcdConfiguration
 import com.fasterxml.jackson.databind.MapperFeature

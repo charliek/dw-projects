@@ -1,7 +1,7 @@
 package charliek.helloworld.service
 
-import charliek.dw.exceptions.NotFoundExceptionMapper
-import charliek.dw.exceptions.ValidationExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import charliek.helloworld.conf.HelloWorldConfiguration
 import charliek.helloworld.resources.BasicResource
 import com.fasterxml.jackson.databind.MapperFeature

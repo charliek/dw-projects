@@ -9,7 +9,7 @@ import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
 import charliek.blog.transfer.Author
 import charliek.blog.transfer.Post
-import charliek.dw.test.IntegrationSpecification
+import com.charlieknudsen.dw.test.IntegrationSpecification
 import com.sun.jersey.api.client.GenericType
 import com.yammer.dropwizard.json.ObjectMapperFactory
 import spock.lang.Shared

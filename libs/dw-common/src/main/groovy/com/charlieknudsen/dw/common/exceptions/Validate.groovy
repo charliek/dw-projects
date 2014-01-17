@@ -1,4 +1,4 @@
-package charliek.dw.exceptions
+package com.charlieknudsen.dw.common.exceptions
 
 class Validate {
 

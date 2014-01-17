@@ -1,6 +1,6 @@
-package charliek.dw.exceptions
+package com.charlieknudsen.dw.common.exceptions
 
-import charliek.dw.transfer.Errors
+import com.charlieknudsen.dw.common.transfer.Errors
 
 class ValidationException extends RuntimeException {
 
