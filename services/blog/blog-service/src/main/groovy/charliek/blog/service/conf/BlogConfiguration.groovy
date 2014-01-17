@@ -3,8 +3,8 @@ package charliek.blog.service.conf
 import com.charlieknudsen.dw.common.conf.GraphiteConfiguration
 import com.charlieknudsen.dropwizard.etcd.EtcdConfiguration
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.yammer.dropwizard.config.Configuration
-import com.yammer.dropwizard.db.DatabaseConfiguration
+import io.dropwizard.Configuration
+import io.dropwizard.db.DataSourceFactory
 
 import javax.validation.Valid
 import javax.validation.constraints.NotNull
@@ -14,7 +14,7 @@ class BlogConfiguration extends Configuration {
     @Valid
     @NotNull
     @JsonProperty
-    DatabaseConfiguration database = new DatabaseConfiguration()
+    DataSourceFactory database = new DataSourceFactory()
 
     @Valid
     @NotNull

@@ -7,10 +7,10 @@ import charliek.blog.transfer.Author
 import charliek.blog.transfer.Post
 import com.charlieknudsen.dw.common.exceptions.ValidationException
 import com.charlieknudsen.dw.common.resources.AbstractResource
+import com.codahale.metrics.annotation.Timed
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.yammer.dropwizard.hibernate.UnitOfWork
-import com.yammer.metrics.annotation.Timed
+import io.dropwizard.hibernate.UnitOfWork
 
 import javax.validation.Valid
 import javax.ws.rs.*

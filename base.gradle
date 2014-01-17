@@ -14,6 +14,7 @@ repositories {
     // Loading so we can get the spock-snapshot
     maven { url 'http://oss.sonatype.org/content/repositories/snapshots' }
     maven { url 'http://dl.bintray.com/content/charliek/maven' }
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {

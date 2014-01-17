@@ -4,6 +4,7 @@ import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
 import com.charlieknudsen.dw.common.exceptions.Validate
 import com.yammer.dropwizard.hibernate.AbstractDAO
+import io.dropwizard.hibernate.AbstractDAO
 import org.hibernate.Criteria
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.Order

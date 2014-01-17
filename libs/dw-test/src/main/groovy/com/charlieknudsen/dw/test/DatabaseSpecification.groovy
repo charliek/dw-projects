@@ -1,28 +1,29 @@
 package com.charlieknudsen.dw.test
 
-import ch.qos.logback.classic.Level
-
-import com.yammer.dropwizard.config.Configuration
-import com.yammer.dropwizard.config.Environment
-import com.yammer.dropwizard.config.LoggingConfiguration
-import com.yammer.dropwizard.config.LoggingFactory
-import com.yammer.dropwizard.db.DatabaseConfiguration
-import com.yammer.dropwizard.hibernate.SessionFactoryFactory
-
+import com.charlieknudsen.dw.common.ObjectMapperFactory
+import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.yammer.dropwizard.json.ObjectMapperFactory
+import com.google.common.collect.ImmutableList
+import io.dropwizard.Configuration
+import io.dropwizard.db.DataSourceFactory
+import io.dropwizard.hibernate.HibernateBundle
+import io.dropwizard.hibernate.SessionFactoryFactory
+import io.dropwizard.setup.Environment
 import org.hibernate.Session
 import org.hibernate.SessionFactory
 import org.hibernate.Transaction
-
 import spock.lang.Shared
 import spock.lang.Specification
+
+import javax.validation.Validation
 
 abstract class DatabaseSpecification extends Specification {
 
     @Shared SessionFactory sessionFactory
     @Shared String databaseId
     @Shared ObjectMapper objectMapper
+
     Session session
     Transaction transaction
 
@@ -57,14 +58,14 @@ abstract class DatabaseSpecification extends Specification {
 
     abstract List<Class<?>> getEntities()
 
-    DatabaseConfiguration getDatabaseConfiguration() {
+    DataSourceFactory getDatabaseConfiguration() {
         databaseId = UUID.randomUUID()
         def properties = ['hibernate.current_session_context_class': 'thread',
                 'hibernate.show_sql': 'false',
                 'hibernate.generate_statistics': 'false',
                 'hibernate.use_sql_comments': 'false',
                 'hibernate.hbm2ddl.auto': 'create']
-        return new DatabaseConfiguration(driverClass: 'org.h2.Driver',
+        return new DataSourceFactory(driverClass: 'org.h2.Driver',
                 user: 'sa', password: 'sa',
                 url: "jdbc:h2:build/${databaseId}",
                 properties: properties)
@@ -74,15 +75,33 @@ abstract class DatabaseSpecification extends Specification {
         if (!entities) {
             throw new IllegalStateException('No database entities found while setting up test')
         }
-        LoggingConfiguration.ConsoleConfiguration consoleConfiguration = new LoggingConfiguration.ConsoleConfiguration()
-        consoleConfiguration.setThreshold(Level.INFO)
-        LoggingConfiguration loggingConfiguration = new LoggingConfiguration(consoleConfiguration: consoleConfiguration)
-        loggingConfiguration.setLoggers(['org.hibernate': Level.INFO])
 
-        Configuration configuration = new Configuration(loggingConfiguration: loggingConfiguration)
-        new LoggingFactory(configuration.loggingConfiguration,'DAOTest').configure()
+        // TODO setup logging configuration
         SessionFactoryFactory factory = new SessionFactoryFactory()
-        Environment environment = new Environment('DAOTest', configuration, null, null)
-        factory.build(environment, databaseConfiguration, entities)
+
+        Environment environment = new Environment(
+                'DAOTest',
+                new ObjectMapperFactory().build(),
+                Validation.buildDefaultValidatorFactory().validator,
+                null, // metrics registry
+                Thread.classLoader)
+
+        // TODO need to make this abstract so it can vary based on the service
+        environment.jersey().register(NotFoundExceptionMapper)
+        environment.jersey().register(ValidationExceptionMapper)
+
+        ImmutableList<Class<?>> classList = new ImmutableList.Builder<Class<?>>()
+                .addAll(entities)
+                .build()
+
+        HibernateBundle<Configuration> bundle = new HibernateBundle<Configuration>(
+                classList, new SessionFactoryFactory()) {
+            @Override
+            DataSourceFactory getDataSourceFactory(Configuration configuration) {
+                return databaseConfiguration
+            }
+        }
+
+        factory.build(bundle, environment, databaseConfiguration, entities)
     }
 }

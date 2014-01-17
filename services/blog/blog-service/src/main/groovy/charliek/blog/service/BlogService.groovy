@@ -7,26 +7,26 @@ import charliek.blog.service.domain.AuthorEntity
 import charliek.blog.service.domain.PostEntity
 import charliek.blog.service.resources.AuthorResource
 import charliek.blog.service.resources.PostResource
-import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
-import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import com.charlieknudsen.dropwizard.etcd.EtcdBundle
 import com.charlieknudsen.dropwizard.etcd.EtcdConfiguration
+import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.ImmutableList
-import com.yammer.dropwizard.Service
-import com.yammer.dropwizard.assets.AssetsBundle
-import com.yammer.dropwizard.config.Bootstrap
-import com.yammer.dropwizard.config.Environment
-import com.yammer.dropwizard.db.DatabaseConfiguration
-import com.yammer.dropwizard.hibernate.HibernateBundle
-import com.yammer.dropwizard.hibernate.SessionFactoryFactory
-import com.yammer.dropwizard.migrations.MigrationsBundle
+import io.dropwizard.Application
+import io.dropwizard.assets.AssetsBundle
+import io.dropwizard.db.DataSourceFactory
+import io.dropwizard.hibernate.HibernateBundle
+import io.dropwizard.hibernate.SessionFactoryFactory
+import io.dropwizard.migrations.MigrationsBundle
+import io.dropwizard.setup.Bootstrap
+import io.dropwizard.setup.Environment
 import org.hibernate.SessionFactory
 
-class BlogService extends Service<BlogConfiguration> {
+class BlogService extends Application<BlogConfiguration> {
 
-    final String serviceName = 'blog-service'
+    final String name = 'blog-service'
 
     public static final List<Class<?>> SERVICE_ENTITIES = [
             PostEntity,
@@ -37,7 +37,7 @@ class BlogService extends Service<BlogConfiguration> {
     MigrationsBundle<BlogConfiguration> buildMigrationsBundle() {
         new MigrationsBundle<BlogConfiguration>() {
             @Override
-            public DatabaseConfiguration getDatabaseConfiguration(BlogConfiguration configuration) {
+            public DataSourceFactory getDataSourceFactory(BlogConfiguration configuration) {
                 return configuration.database
             }
         }
@@ -47,7 +47,7 @@ class BlogService extends Service<BlogConfiguration> {
         ImmutableList entities = ImmutableList.copyOf(SERVICE_ENTITIES)
         new HibernateBundle<BlogConfiguration>(entities, new SessionFactoryFactory()) {
             @Override
-            public DatabaseConfiguration getDatabaseConfiguration(BlogConfiguration configuration) {
+            public DataSourceFactory getDataSourceFactory(BlogConfiguration configuration) {
                 return configuration.database
             }
         }
@@ -69,7 +69,6 @@ class BlogService extends Service<BlogConfiguration> {
 
     @Override
     void initialize(Bootstrap bootstrap) {
-        bootstrap.name = serviceName
         bootstrap.addBundle(assetsBundle)
         bootstrap.addBundle(migrationsBundle)
         bootstrap.addBundle(hibernateBundle)
@@ -78,17 +77,17 @@ class BlogService extends Service<BlogConfiguration> {
 
     @Override
     void run(BlogConfiguration configuration, Environment environment) throws Exception {
-        environment.objectMapperFactory.disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
-        environment.addProvider(NotFoundExceptionMapper)
-        environment.addProvider(ValidationExceptionMapper)
+        environment.objectMapper.disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
+        environment.jersey().register(NotFoundExceptionMapper)
+        environment.jersey().register(ValidationExceptionMapper)
 
         SessionFactory sessionFactory = hibernateBundle.sessionFactory
-        ObjectMapper objectMapper = environment.objectMapperFactory.build()
+        ObjectMapper objectMapper = environment.objectMapper
 
         AuthorDAO authorDAO = new AuthorDAO(sessionFactory)
         PostDAO postDAO = new PostDAO(sessionFactory, authorDAO)
 
-        environment.addResource(new PostResource(postDAO, objectMapper))
-        environment.addResource(new AuthorResource(postDAO, authorDAO, objectMapper))
+        environment.jersey().register(new PostResource(postDAO, objectMapper))
+        environment.jersey().register(new AuthorResource(postDAO, authorDAO, objectMapper))
     }
 }

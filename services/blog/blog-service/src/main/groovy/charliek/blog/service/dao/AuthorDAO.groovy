@@ -3,7 +3,7 @@ package charliek.blog.service.dao
 import charliek.blog.service.domain.AuthorEntity
 import com.charlieknudsen.dw.common.exceptions.ValidationException
 import com.google.common.base.Preconditions
-import com.yammer.dropwizard.hibernate.AbstractDAO
+import io.dropwizard.hibernate.AbstractDAO
 import org.hibernate.SessionFactory
 import org.hibernate.criterion.Restrictions
 import org.joda.time.LocalDateTime

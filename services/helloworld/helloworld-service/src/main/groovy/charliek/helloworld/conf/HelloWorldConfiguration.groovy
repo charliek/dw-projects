@@ -1,6 +1,6 @@
 package charliek.helloworld.conf
 
-import com.yammer.dropwizard.config.Configuration
+import io.dropwizard.Configuration
 
 class HelloWorldConfiguration extends Configuration {
 }

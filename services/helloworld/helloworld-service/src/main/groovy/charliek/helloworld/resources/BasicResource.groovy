@@ -1,9 +1,9 @@
 package charliek.helloworld.resources
 
-import com.charlieknudsen.dw.common.resources.AbstractResource
 import charliek.helloworld.transfer.Hello
+import com.charlieknudsen.dw.common.resources.AbstractResource
+import com.codahale.metrics.annotation.Timed
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.yammer.metrics.annotation.Timed
 
 import javax.ws.rs.GET
 import javax.ws.rs.Path

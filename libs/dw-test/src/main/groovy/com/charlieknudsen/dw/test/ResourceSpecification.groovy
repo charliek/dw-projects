@@ -1,7 +1,9 @@
 package com.charlieknudsen.dw.test
 
+import com.charlieknudsen.dw.common.ObjectMapperFactory
 import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
 import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
+import com.codahale.metrics.MetricRegistry
 import com.sun.jersey.api.client.Client
 import com.sun.jersey.api.client.GenericType
 import com.sun.jersey.test.framework.AppDescriptor
@@ -9,13 +11,13 @@ import com.sun.jersey.test.framework.LowLevelAppDescriptor
 import com.sun.jersey.test.framework.spi.container.TestContainer
 import com.sun.jersey.test.framework.spi.container.TestContainerException
 import com.sun.jersey.test.framework.spi.container.TestContainerFactory
-import com.yammer.dropwizard.jersey.DropwizardResourceConfig
-import com.yammer.dropwizard.jersey.JacksonMessageBodyProvider
-import com.yammer.dropwizard.json.ObjectMapperFactory
-import com.yammer.dropwizard.validation.Validator
+import io.dropwizard.jersey.DropwizardResourceConfig
+import io.dropwizard.jersey.jackson.JacksonMessageBodyProvider
 import spock.lang.Shared
 import spock.lang.Specification
 
+import javax.validation.Validation
+import javax.validation.Validator
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.UriBuilder
 
@@ -34,8 +36,9 @@ abstract class ResourceSpecification extends Specification {
     @Shared Validator validator
 
     def setupSpec() {
-        validator = new Validator()
-        resourceConfig = new DropwizardResourceConfig(true)
+        validator = Validation.buildDefaultValidatorFactory().validator
+        MetricRegistry registry = new MetricRegistry()
+        resourceConfig = DropwizardResourceConfig.forTesting(registry)
         addProvider(new JacksonMessageBodyProvider(new ObjectMapperFactory().build(), validator))
 
         // TODO need to make this abstract so it can vary based on the service

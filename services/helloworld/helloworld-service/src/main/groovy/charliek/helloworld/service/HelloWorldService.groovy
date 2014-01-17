@@ -1,21 +1,20 @@
 package charliek.helloworld.service
 
-import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
-import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import charliek.helloworld.conf.HelloWorldConfiguration
 import charliek.helloworld.resources.BasicResource
+import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
+import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
 import com.fasterxml.jackson.databind.MapperFeature
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.yammer.dropwizard.Service
-import com.yammer.dropwizard.assets.AssetsBundle
-import com.yammer.dropwizard.config.Bootstrap
-import com.yammer.dropwizard.config.Environment
+import io.dropwizard.Application
+import io.dropwizard.assets.AssetsBundle
+import io.dropwizard.setup.Bootstrap
+import io.dropwizard.setup.Environment
 
-class HelloWorldService extends Service<HelloWorldConfiguration> {
-
-    final String serviceName = 'helloworld'
+class HelloWorldService extends Application<HelloWorldConfiguration> {
 
     protected final AssetsBundle assetsBundle = new AssetsBundle()
+
+    String name = 'helloworld'
 
     public static void main(String[] args) throws Exception {
         new HelloWorldService().run(args)
@@ -23,16 +22,14 @@ class HelloWorldService extends Service<HelloWorldConfiguration> {
 
     @Override
     void initialize(Bootstrap bootstrap) {
-        bootstrap.name = serviceName
         bootstrap.addBundle(assetsBundle)
     }
 
     @Override
     void run(HelloWorldConfiguration configuration, Environment environment) throws Exception {
-        environment.objectMapperFactory.disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
-        environment.addProvider(NotFoundExceptionMapper)
-        environment.addProvider(ValidationExceptionMapper)
-        ObjectMapper objectMapper = environment.objectMapperFactory.build()
-        environment.addResource(new BasicResource(objectMapper))
+        environment.objectMapper.disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
+        environment.jersey().register(NotFoundExceptionMapper)
+        environment.jersey().register(ValidationExceptionMapper)
+        environment.jersey().register(new BasicResource(environment.objectMapper))
     }
 }

@@ -1,6 +1,6 @@
 package com.charlieknudsen.dw.test
 
-import com.yammer.dropwizard.hibernate.AbstractDAO
+import io.dropwizard.hibernate.AbstractDAO
 
 abstract class DAOSpecification<T extends AbstractDAO> extends DatabaseSpecification {
 

@@ -3,7 +3,7 @@ apply from: rootProject.file('base.gradle')
 
 dependencies {
     compile project(":libs:dw-common")
-    compile "com.yammer.dropwizard:dropwizard-testing:${dropwizardVersion}"
+    compile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
 
     // Normally in the test scope, but since this is a test library these must be included in compile.
     compile "org.spockframework:spock-core:${spockVersion}"
