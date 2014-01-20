@@ -11,6 +11,8 @@ import com.charlieknudsen.dropwizard.etcd.EtcdBundle
 import com.charlieknudsen.dropwizard.etcd.EtcdConfiguration
 import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
 import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.MapperFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.common.collect.ImmutableList
@@ -77,7 +79,11 @@ class BlogService extends Application<BlogConfiguration> {
 
     @Override
     void run(BlogConfiguration configuration, Environment environment) throws Exception {
-        environment.objectMapper.disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
+        environment.objectMapper
+                .disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
+
         environment.jersey().register(NotFoundExceptionMapper)
         environment.jersey().register(ValidationExceptionMapper)
 

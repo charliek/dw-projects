@@ -2,6 +2,7 @@ package charliek.blog.service.domain
 
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
+import org.hibernate.annotations.Type
 import org.joda.time.LocalDateTime
 
 import javax.persistence.*
@@ -31,6 +32,7 @@ class PostEntity {
     String slug
 
     @Lob
+    @Type(type = 'org.hibernate.type.TextType')
     @Column(nullable = false, columnDefinition = 'TEXT')
     String body
 
