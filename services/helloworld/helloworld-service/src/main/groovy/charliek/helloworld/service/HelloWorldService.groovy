@@ -4,6 +4,8 @@ import charliek.helloworld.conf.HelloWorldConfiguration
 import charliek.helloworld.resources.BasicResource
 import com.charlieknudsen.dw.common.exceptions.NotFoundExceptionMapper
 import com.charlieknudsen.dw.common.exceptions.ValidationExceptionMapper
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.MapperFeature
 import io.dropwizard.Application
 import io.dropwizard.assets.AssetsBundle
@@ -27,7 +29,10 @@ class HelloWorldService extends Application<HelloWorldConfiguration> {
 
     @Override
     void run(HelloWorldConfiguration configuration, Environment environment) throws Exception {
-        environment.objectMapper.disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
+        environment.objectMapper
+                .disable(MapperFeature.AUTO_DETECT_IS_GETTERS)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                .configure(JsonParser.Feature.ALLOW_COMMENTS, true)
         environment.jersey().register(NotFoundExceptionMapper)
         environment.jersey().register(ValidationExceptionMapper)
         environment.jersey().register(new BasicResource(environment.objectMapper))
