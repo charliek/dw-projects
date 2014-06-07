@@ -1,0 +1,47 @@
+subprojects {
+
+    // Note setting the findbugs and pmd version to avoid error messages in both. See:
+    // http://forums.gradle.org/gradle/topics/warning_after_gradle_update_1_9_with_pmd_plugin
+
+    apply plugin: 'findbugs'
+    findbugs {
+        toolVersion = "2.0.3"
+        excludeFilter = file("$rootProject.projectDir/gradle/findbugs/excludeFilter.xml")
+    }
+    tasks.withType(FindBugs) {
+        reports.html.enabled true
+        reports.xml.enabled false
+    }
+
+    apply plugin: 'pmd'
+    pmd {
+        toolVersion = '5.0.5'
+    }
+    tasks.withType(Pmd) {
+         reports.html.enabled true
+         reports.xml.enabled false
+    }
+
+    apply plugin: 'cobertura'
+    // TODO need to specify base code coverage thresholds for failing build
+
+
+    /** Codenarc Configuration */
+    apply plugin: 'codenarc'
+    codenarc {
+        if (project.hasProperty('codenarc.reportFormat')) {
+            reportFormat = project.getProperty('codenarc.reportFormat')
+        }
+        configFile = rootProject.file('codenarc.groovy')
+    }
+    codenarcTest.enabled = false
+
+    /** Test Configuration */
+    test.dependsOn codenarcMain
+    test {
+        if (project.hasProperty('test.testReport')) {
+            testReport = Boolean.parseBoolean(project.getProperty('test.testReport'))
+        }
+    }
+
+}

@@ -1,0 +1,7 @@
+// Executed in context of buildscript
+repositories {
+    // Repo in addition to maven central
+}
+dependencies {
+    classpath 'net.saliman:gradle-cobertura-plugin:2.2.1'
+}

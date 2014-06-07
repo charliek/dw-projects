@@ -1,5 +1,0 @@
-group "${rootProject.group}.service"
-apply from: rootProject.file('base.gradle')
-
-dependencies {
-}

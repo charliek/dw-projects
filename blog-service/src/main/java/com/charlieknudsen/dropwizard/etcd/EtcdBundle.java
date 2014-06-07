@@ -61,9 +61,7 @@ public abstract class EtcdBundle<T extends Configuration> implements ConfiguredB
         return unableToDiscoverPort();
     }
 
-    @Override
-    public void run(T configuration, Environment environment) {
-        EtcdConfiguration etcdConfig = getEtcdConfiguration(configuration);
+    private void setupBundle(T configuration, Environment environment, EtcdConfiguration etcdConfig) {
         log.info("Initializing etcd client with hosts {}", etcdConfig.hosts);
         client = new EtcdClient(etcdConfig.hosts);
 
@@ -94,6 +92,16 @@ public abstract class EtcdBundle<T extends Configuration> implements ConfiguredB
                     publisher.stop();
                 }
             });
+        }
+    }
+
+    @Override
+    public void run(T configuration, Environment environment) {
+        EtcdConfiguration etcdConfig = getEtcdConfiguration(configuration);
+        if(etcdConfig.enabled) {
+            setupBundle(configuration, environment, etcdConfig);
+        } else {
+            log.info("Etcd disabled. Skipping etcd initialization");
         }
     }
 

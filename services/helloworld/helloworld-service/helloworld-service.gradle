@@ -1,4 +1,0 @@
-apply from: rootProject.file('service.gradle')
-
-dependencies {
-}

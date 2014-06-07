@@ -15,4 +15,8 @@ public class EtcdConfiguration {
     @Valid
     public EtcdPublishConfiguration publish;
 
+    @JsonProperty
+    @Valid
+    public boolean enabled = true;
+
 }

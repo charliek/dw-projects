@@ -1,0 +1,125 @@
+import org.gradle.api.plugins.shadow.transformers.ServiceFileTransformer
+import org.gradle.api.plugins.shadow.ShadowPlugin
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            name 'Gradle Shadow'
+            url 'http://dl.bintray.com/content/johnrengelman/gradle-plugins'
+        }
+    }
+
+    dependencies {
+        classpath 'org.gradle.plugins:shadow:0.7.4'
+    }
+}
+
+apply plugin: ShadowPlugin
+
+// Create the zip artifact for the service
+// Includes the shadow-jar, config files, and the signedLibs folder with jars
+task zip(type: Zip, dependsOn: 'shadow') {
+    description = 'Creates zip file containing shadow jar, signed libs, and config files'
+    from project.shadow.shadowJar
+    into('signedLibs') {
+        from project.shadow.signedLibsDir
+    }
+    from('src/main/resources') {
+        include '*.yml'
+    }
+}
+assemble.dependsOn zip
+
+// Specify the manifest file contents for the service Jar, by defaut this is included as the manifest in the fat-jar
+jar {
+    manifest {
+        attributes 'Main-Class': serviceMainClass //declare in service project's gradle.properties, this is DW service class that will execute
+        attributes 'Built-By': System.getProperty('user.name')
+        attributes 'Build-Jdk': System.getProperty('java.version')
+        attributes 'BUILD_NUMBER': System.env.BUILD_NUMBER ?: 'LOCAL'
+        attributes 'BUILD_URL': System.env.BUILD_URL ?: 'LOCAL'
+        attributes 'GIT_COMMIT': System.env.GIT_COMMIT ?: 'LOCAL'
+        attributes 'GIT_BRANCH': System.env.GIT_BRANCH ?: 'LOCAL'
+        attributes 'Implementation-Title': project.name
+        attributes 'Implementation-Version': project.version
+        attributes 'Implementation-Vendor-Id': project.group
+    }
+}
+
+// Generate the class path for the service jar by adding any signedCompile or signedRuntime dependencies
+jar.doFirst {
+    List<String> jarClassPath = []
+    jarClassPath += configurations.signedCompile.files.collect {"./signedLibs/${it.name}"}
+    jarClassPath += configurations.signedRuntime.files.collect {"./signedLibs/${it.name}"}
+    project.jar.manifest.attributes 'Built-Date': new Date()
+    project.jar.manifest.attributes 'Class-Path': jarClassPath.join(' ')
+}
+
+// Exclude jar signing files since we are modifying them
+shadow {
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    transformer ServiceFileTransformer
+}
+
+// Make the shadow task dependent on the copySignedLibs so they are always available
+project.tasks.shadow.dependsOn copySignedLibs
+project.tasks.shadow.doLast {
+    ant.checksum file: it.outputJar
+}
+
+// Remove the jar artifact and publish the zip
+publishing.publications.artifact.artifacts = []
+publishing.publications.artifact.artifact zip
+
+/**
+ * Task that will start up the DW service using the local configuration.
+ * This doesn't fork, so the Gradle process doesn't return until the service is killed (Ctrl+C)
+ */
+task run(dependsOn: 'shadow', group: "Dropwizard", description: "Launch the dropwizard service using the local configuration") << {
+    //Grab any dw. properties that are specified on the command line and pass to the Java process (i.e. dw.http.port=8080)
+    def props = project.ext.properties.findAll { it.key.startsWith('dw') }
+    javaexec {
+        main = '-jar'
+        args = ["${shadow.shadowJar.getPath()}", 'server', 'src/main/resources/local_config.yml']
+        systemProperties = props
+    }
+}
+
+/**
+ * Task that will start up the DW service using the local configuration in a suspended debug mode.
+ * This doesn't fork, so the Gradle process doesn't return until the service is killed (Ctrl+C)
+ */
+task debug(dependsOn: 'shadow', group: "Dropwizard", description: "Launch the dropwizard service using the local configuration") << {
+    //Grab any dw. properties that are specified on the command line and pass to the Java process (i.e. dw.http.port=8080)
+    def props = project.ext.properties.findAll { it.key.startsWith('dw') }
+    javaexec {
+        main = '-jar'
+        debug = true
+        args = ["${shadow.shadowJar.getPath()}", 'server', 'src/main/resources/local_config.yml']
+        systemProperties = props
+    }
+}
+
+/**
+ * Add a DB migrate task that delegates to DropWizard using the local configuration
+ */
+task migrate(dependsOn: 'shadow', group: "Dropwizard", description: "Execute the dropwizard DB migrations using the local configuration") << {
+    javaexec {
+        main = '-jar'
+        args = ["${shadow.shadowJar.getPath()}", 'db', 'migrate', 'src/main/resources/local_config.yml']
+    }
+}
+
+/**
+ * Add a DB drop-all task that delegates to DropWizard using the local configuration
+ */
+task dropAll(dependsOn: 'shadow', group: "Dropwizard", description: "Execute the dropwizard DB drop-all command using the local configuration") << {
+    javaexec {
+        main = '-jar'
+        args = ["${shadow.shadowJar.getPath()}", 'db', 'drop-all', 'src/main/resources/local_config.yml', '--confirm-delete-everything']
+    }
+}
+

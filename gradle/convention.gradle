@@ -1,0 +1,59 @@
+task wrapper(type: Wrapper) {
+      gradleVersion = "1.10"
+}
+
+allprojects {
+    apply plugin: "base"
+    apply plugin: "idea"
+    apply plugin: 'build-dashboard'
+}
+
+subprojects { project ->
+    apply plugin: 'groovy'
+
+    sourceCompatibility = "1.7"
+    targetCompatibility = "1.7"
+
+    configurations {
+        provided {
+            description = 'Provided scope similar to maven.'
+            transitive = true
+            visible = true
+        }
+    }
+
+    project.sourceSets {
+        main.compileClasspath += project.configurations.provided
+        main.runtimeClasspath -= project.configurations.provided
+        test.compileClasspath += project.configurations.provided
+        test.runtimeClasspath += project.configurations.provided
+    }
+
+    task sourceJar(type: Jar) {
+      description "An archive of the source code for Maven Central"
+      classifier "sources"
+      from sourceSets.main.allSource
+    }
+
+    artifacts {
+      archives sourceJar
+    }
+
+    configurations {
+        all*.exclude group: 'log4j', module: 'log4j'
+    }
+
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.name == 'groovy') {
+                details.useTarget group: details.requested.group, name: 'groovy-all', version: groovyVersion
+            }
+            if (details.requested.name == 'groovy-all') {
+                details.useVersion groovyVersion
+            }
+            if (details.requested.name == 'spock-core') {
+                details.useVersion spockVersion
+            }
+        }
+    }
+}
