@@ -32,7 +32,7 @@ subprojects {
         if (project.hasProperty('codenarc.reportFormat')) {
             reportFormat = project.getProperty('codenarc.reportFormat')
         }
-        configFile = rootProject.file('codenarc.groovy')
+        configFile = rootProject.file('gradle/codenarc/codenarc.groovy')
     }
     codenarcTest.enabled = false
 
