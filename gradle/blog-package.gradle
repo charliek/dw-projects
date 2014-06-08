@@ -1,0 +1,29 @@
+buildscript {
+    apply from: rootProject.file('gradle/buildscript.gradle'), to: buildscript
+}
+
+apply plugin: 'pkg-debian'
+
+debian {
+  packagename = project.name
+  publications = ['trusty']
+  controlDirectory = "${projectDir}/src/debian/control"
+  changelogFile = "${projectDir}/src/debian/changelog"
+  outputFile = "${buildDir}/${project.name}_${version}_all.deb"
+
+
+  data {
+    dir {
+        name = "${projectDir}/src/debian/data"
+        excludes = ["**/.DS_Store"]
+    }
+    file {
+        name = "${buildDir}/libs/${project.name}-${project.version}-shadow.jar"
+        target = "usr/share/${project.name}/application.jar"
+    }
+    file {
+        name = "${projectDir}/src/main/resources/prod_config.yml"
+        target = "usr/share/${project.name}/config.yaml"
+    }
+  }
+}

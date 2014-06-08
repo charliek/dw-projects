@@ -1,8 +1,4 @@
 buildscript {
-    repositories {
-        mavenLocal()
-        jcenter()
-    }
     apply from: file('gradle/buildscript.gradle'), to: buildscript
 }
 
@@ -63,6 +59,7 @@ project(':blog-client') {
 project(':blog-service') {
     group "${rootProject.group}.service"
     apply from: rootProject.file('gradle/service.gradle')
+    apply from: rootProject.file('gradle/blog-package.gradle')
     dependencies {
         compile project(":blog-api")
         compile project(":dw-common")

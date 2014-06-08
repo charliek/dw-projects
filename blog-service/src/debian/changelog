@@ -1,0 +1,4 @@
+release date=23:04 07.06.2014,version=0.2,urgency=low,by=Charlie Knudsen <charlie.knudsen@gmail.com>
+ * Adding Etcd Support
+release date=23:04 31.01.2014,version=0.1,urgency=low,by=Charlie Knudsen <charlie.knudsen@gmail.com>
+ * Initial release.

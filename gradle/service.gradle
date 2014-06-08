@@ -2,18 +2,7 @@ import org.gradle.api.plugins.shadow.transformers.ServiceFileTransformer
 import org.gradle.api.plugins.shadow.ShadowPlugin
 
 buildscript {
-    repositories {
-        mavenLocal()
-        mavenCentral()
-        maven {
-            name 'Gradle Shadow'
-            url 'http://dl.bintray.com/content/johnrengelman/gradle-plugins'
-        }
-    }
-
-    dependencies {
-        classpath 'org.gradle.plugins:shadow:0.7.4'
-    }
+    apply from: rootProject.file('gradle/buildscript.gradle'), to: buildscript
 }
 
 apply plugin: ShadowPlugin
@@ -122,4 +111,3 @@ task dropAll(dependsOn: 'shadow', group: "Dropwizard", description: "Execute the
         args = ["${shadow.shadowJar.getPath()}", 'db', 'drop-all', 'src/main/resources/local_config.yml', '--confirm-delete-everything']
     }
 }
-
