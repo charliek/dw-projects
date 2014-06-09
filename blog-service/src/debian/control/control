@@ -2,7 +2,7 @@ Package: [[name]]
 Version: [[version]]
 Section: base
 Priority: optional
-Architecture: any
+Architecture: all
 Depends: openjdk-7-jre-headless
 Maintainer: Charlie Knudsen <charlie.knudsen@gmail.com>
 Description: Dropwizard Blog service

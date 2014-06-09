@@ -6,7 +6,7 @@ apply plugin: 'pkg-debian'
 
 debian {
   packagename = project.name
-  publications = ['trusty']
+  publications = []
   controlDirectory = "${projectDir}/src/debian/control"
   changelogFile = "${projectDir}/src/debian/changelog"
   outputFile = "${buildDir}/${project.name}_${version}_all.deb"
