@@ -69,6 +69,7 @@ project(':blog-service') {
         compile "com.charlieknudsen.ribbon-ext:ribbon-etcd:${ribbonExtVersion}"
         compile "com.charlieknudsen.ribbon-ext:etcd-client:${ribbonExtVersion}"
         compile "org.postgresql:postgresql:9.3-1100-jdbc41"
+		compile "mysql:mysql-connector-java:5.1.31"
     }
 }
 

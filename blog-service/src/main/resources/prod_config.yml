@@ -1,6 +1,6 @@
 database:
   # the name of your JDBC driver
-  driverClass: org.postgresql.Driver
+  driverClass: com.mysql.jdbc.Driver
 
   # the username
   user: blog
@@ -9,7 +9,7 @@ database:
   password: blog
 
   # the JDBC URL
-  url: jdbc:postgresql://127.0.0.1:5432/blog
+  url: jdbc:mysql://127.0.0.1:5432/blog
 
   # any properties specific to your JDBC driver:
   properties:
@@ -30,7 +30,6 @@ database:
   # whether or not idle connections should be validated
   checkConnectionWhileIdle: false
 
-
 server:
   applicationConnectors:
     - type: http
@@ -46,8 +45,6 @@ server:
     - type: http
       port: 5679
 
-# TODO look into request log configuration
-
 
 # Logging settings.
 logging:
@@ -57,15 +54,12 @@ logging:
 
   # Logger-specific levels.
   loggers:
-    charliek.blog: INFO
-    com.charlieknudsen: INFO
+    charliek.blog: DEBUG
+    org.hibernate.SQL: ALL
+    com.charlieknudsen: DEBUG
 
   appenders:
     - type: console
-    - type: syslog
-      host: localhost
-      facility: local0
-      logFormat: blog-service [%thread] %logger %msg
 
 graphite:
   enabled: false
@@ -73,8 +67,10 @@ graphite:
 
 etcd:
   # Comma separated list of etcdHosts that can be connected to
-  hosts: http://127.0.0.1:4001
+  hosts: http://192.168.70.99:4001
 
   # Publish this service with these details
   publish:
     hostName: 127.0.0.1
+
+  enabled: false
