@@ -1,0 +1,14 @@
+environment:
+  image: charliek/ci-java:openjdk7-gradle19
+  language: java
+  vars:
+    GRADLE_OPTS: "\"-Xms56m -Xmx256m -XX:MaxPermSize=256m -XX:+CMSClassUnloadingEnabled\""
+
+build:
+  run:
+    - gradle clean check build
+
+plugins:
+  <% if( DOTCI_BRANCH == 'master'){ %>
+  - artifacts: '**/*-shadow.jar'
+  <%}%>
